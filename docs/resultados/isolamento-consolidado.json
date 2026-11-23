@@ -1,0 +1,31 @@
+{
+  "gerado_em": "2026-11-23T22:21:13.439437+00:00",
+  "inicio": "2026-11-23T22:21:06.107732+00:00",
+  "ambiente": {
+    "lancamentos": "http://localhost:8001",
+    "consolidado": "http://localhost:8002",
+    "data": "2026-11-23",
+    "comerciante_id": "aa7c3e46-b67b-4651-a221-40338fe61d05"
+  },
+  "procedimento": [
+    "docker compose stop consolidado",
+    "POST /v1/lancamentos com créditos e débitos",
+    "docker compose start consolidado",
+    "GET /v1/saldos até convergência"
+  ],
+  "resultado": {
+    "consolidado_indisponivel_durante_escrita": true,
+    "lancamentos_aceitos": 4,
+    "ids": [
+      "c1126e46-529f-4c1d-9618-5f7fc98add52",
+      "269bfc7d-1bcf-4414-8ada-38473198953f",
+      "bec8b99e-d3aa-4df2-adae-c0564a5ac4d0",
+      "aad63511-fcd0-4fb4-ae2f-91cdb8932f84"
+    ],
+    "saldo_esperado": "85.50",
+    "saldo_final": "85.50",
+    "total_creditos": "120.50",
+    "total_debitos": "35.00",
+    "sem_duplicidade": true
+  }
+}

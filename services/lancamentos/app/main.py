@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from datetime import date, datetime, timezone
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from pydantic import BaseModel
 from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
@@ -13,7 +14,7 @@ from app import db
 from app.db import init_db
 from app.domain import LancamentoInvalido, normalizar_valor
 from app.models import Lancamento, Outbox
-from app.publisher import ciclo_publicacao
+from app.publisher import ciclo_publicacao, republicar_periodo
 from app.schemas import LancamentoIn, LancamentoOut
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -120,3 +121,23 @@ def listar(
         consulta = consulta.where(Lancamento.data_lancamento == data_lancamento)
     consulta = consulta.order_by(Lancamento.criado_em.desc()).limit(limite)
     return list(session.scalars(consulta))
+
+
+class RepublicarIn(BaseModel):
+    data_inicio: date
+    data_fim: date
+
+
+@app.post(
+    "/v1/outbox/republicar",
+    dependencies=[Depends(exigir_chave)],
+)
+def republicar(dados: RepublicarIn, session: Session = Depends(get_session)):
+    if dados.data_fim < dados.data_inicio:
+        raise HTTPException(status_code=422, detail="data_fim deve ser >= data_inicio")
+    quantidade = republicar_periodo(session, dados.data_inicio, dados.data_fim)
+    return {
+        "marcados": quantidade,
+        "data_inicio": dados.data_inicio.isoformat(),
+        "data_fim": dados.data_fim.isoformat(),
+    }
