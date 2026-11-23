@@ -1,0 +1,101 @@
+{
+  "gerado_em": "2026-11-23T22:34:20.734344+00:00",
+  "ambiente": {
+    "lancamentos": "http://localhost:8001",
+    "consolidado": "http://localhost:8002",
+    "amostras": 20,
+    "meta_s": 5.0,
+    "comerciante_id": "e206a128-6818-4a6e-93db-43bae6b84f18",
+    "data": "2026-11-23"
+  },
+  "resultado": {
+    "atraso_p50_s": 0.5115,
+    "atraso_p95_s": 0.5465,
+    "atraso_max_s": 0.5476,
+    "atraso_medio_s": 0.5107,
+    "amostras_dentro_da_meta": 20,
+    "meta_atingida": true,
+    "detalhes": [
+      {
+        "amostra": 1,
+        "atraso_s": 0.5186
+      },
+      {
+        "amostra": 2,
+        "atraso_s": 0.5476
+      },
+      {
+        "amostra": 3,
+        "atraso_s": 0.5044
+      },
+      {
+        "amostra": 4,
+        "atraso_s": 0.5277
+      },
+      {
+        "amostra": 5,
+        "atraso_s": 0.4855
+      },
+      {
+        "amostra": 6,
+        "atraso_s": 0.4974
+      },
+      {
+        "amostra": 7,
+        "atraso_s": 0.5244
+      },
+      {
+        "amostra": 8,
+        "atraso_s": 0.4867
+      },
+      {
+        "amostra": 9,
+        "atraso_s": 0.4917
+      },
+      {
+        "amostra": 10,
+        "atraso_s": 0.5357
+      },
+      {
+        "amostra": 11,
+        "atraso_s": 0.4724
+      },
+      {
+        "amostra": 12,
+        "atraso_s": 0.5306
+      },
+      {
+        "amostra": 13,
+        "atraso_s": 0.4954
+      },
+      {
+        "amostra": 14,
+        "atraso_s": 0.5421
+      },
+      {
+        "amostra": 15,
+        "atraso_s": 0.4747
+      },
+      {
+        "amostra": 16,
+        "atraso_s": 0.5465
+      },
+      {
+        "amostra": 17,
+        "atraso_s": 0.4807
+      },
+      {
+        "amostra": 18,
+        "atraso_s": 0.4851
+      },
+      {
+        "amostra": 19,
+        "atraso_s": 0.521
+      },
+      {
+        "amostra": 20,
+        "atraso_s": 0.5458
+      }
+    ]
+  }
+}

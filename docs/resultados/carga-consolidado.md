@@ -2,6 +2,8 @@
 
 Meta: 50 req/s por 60s, perda máxima de 5%.
 
+Critério de sucesso: **somente HTTP 2xx**. Timeout, conexão recusada, 3xx, 4xx e 5xx entram na perda.
+
 ## Comando
 
 Com o stack no ar (`docker compose up --build -d`):
@@ -19,20 +21,23 @@ O script grava o JSON em `docs/resultados/carga-consolidado.json`.
 - Alvo: `GET /v1/saldos/{id}?data=2026-11-23`
 - Timeout por requisição: 2s
 - Workers: 100
+- Critério de sucesso: HTTP 2xx apenas
 
 ## Resultado
 
+Valores abaixo são os do JSON desta execução.
+
 | Métrica | Valor |
 | --- | --- |
-| Duração | 59.991 s |
+| Duração | 59.990 s |
 | Volume enviado | 3000 |
-| Sucesso | 3000 |
+| Sucesso (2xx) | 3000 |
 | Erros | 0 |
 | Timeouts | 0 |
 | Perda | 0.000% |
-| RPS efetivo | 50.007 |
-| Latência p50 | 5.018 ms |
-| Latência p95 | 8.949 ms |
+| RPS efetivo | 50.008 |
+| Latência p50 | 6.942 ms |
+| Latência p95 | 12.099 ms |
 | Meta ≤ 5% | atingida |
 
 JSON bruto: [carga-consolidado.json](carga-consolidado.json).

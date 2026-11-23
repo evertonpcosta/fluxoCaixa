@@ -59,17 +59,21 @@ python3 -m unittest discover -s services/lancamentos/tests -t services/lancament
 python3 -m unittest discover -s services/consolidado/tests -t services/consolidado
 ```
 
-Validações de carga, isolamento e recuperação (stack no ar):
+Validações de carga, atraso do saldo, isolamento e recuperação (stack no ar):
 
 ```bash
 python3 scripts/carga_consolidado.py --rps 50 --segundos 60
+python3 scripts/atraso_saldo.py --amostras 20
 python3 scripts/isolamento_consolidado.py
 python3 scripts/recuperacao_outbox.py
 ```
+
+Na carga, só HTTP 2xx conta como sucesso.
 
 ## Documentação
 
 - [Arquitetura, aceite, produção e diferenciais](docs/arquitetura.md)
 - [Resultado da carga 50 rps](docs/resultados/carga-consolidado.md)
+- [Atraso do saldo ≤ 5s](docs/resultados/atraso-saldo.md)
 - [Isolamento com consolidado parado](docs/resultados/isolamento-consolidado.md)
 - [Recuperação via outbox](docs/resultados/recuperacao-outbox.md)

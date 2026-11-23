@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Carga no consolidado: ~50 req/s na consulta de saldo.
 
+Sucesso = apenas HTTP 2xx. Qualquer outro status, timeout ou falha de
+conexão entra na perda.
+
 Uso:
   python3 scripts/carga_consolidado.py --url http://localhost:8002 --rps 50 --segundos 60
 """
@@ -24,7 +27,8 @@ def consultar(url: str, timeout: float) -> tuple[str, float]:
         with urllib.request.urlopen(url, timeout=timeout) as resposta:
             codigo = resposta.status
             resposta.read()
-        return ("ok" if 200 <= codigo < 400 else f"http_{codigo}", time.perf_counter() - inicio)
+        # Somente 2xx conta como sucesso.
+        return ("ok" if 200 <= codigo < 300 else f"http_{codigo}", time.perf_counter() - inicio)
     except urllib.error.HTTPError as exc:
         return (f"http_{exc.code}", time.perf_counter() - inicio)
     except TimeoutError:
@@ -85,6 +89,7 @@ def main() -> None:
             "duracao_planejada_s": args.segundos,
             "timeout_s": args.timeout,
             "workers": args.rps * 2,
+            "criterio_sucesso": "HTTP 2xx apenas",
         },
         "resultado": {
             "duracao_real_s": round(duracao, 3),

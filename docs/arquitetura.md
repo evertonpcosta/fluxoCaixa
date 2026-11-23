@@ -30,14 +30,14 @@ Comerciante, aqui, é um id informado por quem chama. Sem cadastro, sem usuário
 | --- | --- | --- |
 | RNF01 | Isolamento | Com consolidado parado, lançamentos respondem 201. Ver [isolamento](resultados/isolamento-consolidado.md) |
 | RNF02 | 50 req/s no consolidado | Perda ≤ 5% em 60s a 50 rps. Ver [carga](resultados/carga-consolidado.md) |
-| RNF03 | Atraso do saldo | Em operação normal, saldo atualizado em até 5s após o commit do lançamento |
+| RNF03 | Atraso do saldo | Em operação normal, saldo atualizado em até 5s após o commit do lançamento. Medido: [atraso](resultados/atraso-saldo.md) |
 | RNF04 | Recuperação | Após perda do stream, `POST /v1/outbox/republicar` reconstrói o saldo sem duplicidade. Ver [recuperação](resultados/recuperacao-outbox.md) |
 
 ### Como a perda é medida
 
 Perda = `(requisições sem sucesso HTTP 2xx / volume enviado) * 100`.
 
-Contam como perda: timeout, conexão recusada, 5xx e qualquer status fora de 2xx/3xx. O script `scripts/carga_consolidado.py` gera o JSON com volume, erros, timeouts e percentual.
+Sucesso é **somente 2xx**. Contam como perda: timeout, conexão recusada, 3xx, 4xx e 5xx. O script `scripts/carga_consolidado.py` grava o critério no JSON (`criterio_sucesso`) junto com volume, erros, timeouts, latências e percentual.
 
 ### Como verificar a recuperação
 
@@ -169,5 +169,6 @@ Se o caixa hoje fosse planilha: gravar na API, conferir saldo contra a planilha 
 ## Evidências
 
 - [Carga 50 rps](resultados/carga-consolidado.md)
+- [Atraso do saldo ≤ 5s](resultados/atraso-saldo.md)
 - [Isolamento com consolidado parado](resultados/isolamento-consolidado.md)
 - [Recuperação via outbox](resultados/recuperacao-outbox.md)
