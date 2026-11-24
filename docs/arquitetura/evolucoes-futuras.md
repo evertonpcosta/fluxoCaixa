@@ -8,7 +8,7 @@ Itens que demonstram visão além do MVP (tempo limitado do desafio).
 |---|---|
 | Autenticação JWT no front e nas APIs | Segurança de consumo |
 | Testes de carga automatizados no CI | Evidência contínua do RNF de 50 rps |
-| Dashboard Grafana (fila, latência, erros) | Operação |
+| Alertas Grafana / Alertmanager | Operação (dashboard base já no Compose) |
 | `GET /health/ready` diferenciado | Orquestração/k8s |
 
 ## Médio prazo

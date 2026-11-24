@@ -1,0 +1,162 @@
+services:
+  postgres-lancamentos:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fluxo
+      POSTGRES_PASSWORD: fluxo
+      POSTGRES_DB: lancamentos
+    volumes:
+      - pg_lancamentos_data:/var/lib/postgresql/data
+      - ./infra/postgres/lancamentos-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fluxo -d lancamentos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - fluxo-caixa
+
+  postgres-consolidado:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fluxo
+      POSTGRES_PASSWORD: fluxo
+      POSTGRES_DB: consolidado
+    volumes:
+      - pg_consolidado_data:/var/lib/postgresql/data
+      - ./infra/postgres/consolidado-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fluxo -d consolidado"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - fluxo-caixa
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    environment:
+      RABBITMQ_DEFAULT_USER: fluxo
+      RABBITMQ_DEFAULT_PASS: fluxo
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./infra/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - fluxo-caixa
+
+  lancamentos:
+    build:
+      context: ./services/lancamentos
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql+psycopg://fluxo:fluxo@postgres-lancamentos:5432/lancamentos
+      RABBITMQ_URL: amqp://fluxo:fluxo@rabbitmq:5672/
+      LOG_LEVEL: INFO
+    depends_on:
+      postgres-lancamentos:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - fluxo-caixa
+
+  consolidado:
+    build:
+      context: ./services/consolidado
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      DATABASE_URL: postgresql+psycopg://fluxo:fluxo@postgres-consolidado:5432/consolidado
+      RABBITMQ_URL: amqp://fluxo:fluxo@rabbitmq:5672/
+      LOG_LEVEL: INFO
+    depends_on:
+      postgres-consolidado:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - fluxo-caixa
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      LANCAMENTOS_URL: http://lancamentos:8001
+      CONSOLIDADO_URL: http://consolidado:8002
+    depends_on:
+      - lancamentos
+      - consolidado
+    networks:
+      - fluxo-caixa
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    depends_on:
+      - lancamentos
+      - consolidado
+      - rabbitmq
+    networks:
+      - fluxo-caixa
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - fluxo-caixa
+
+volumes:
+  pg_lancamentos_data:
+  pg_consolidado_data:
+  rabbitmq_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  fluxo-caixa:
+    driver: bridge

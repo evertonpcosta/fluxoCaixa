@@ -23,6 +23,11 @@ Lançamentos          Consolidado
     │                    │
     └──► RabbitMQ ───────┘
          (eventos)
+
+ /metrics (APIs + RabbitMQ)
+         │
+         ▼
+    Prometheus ──► Grafana
 ```
 
 Diagramas detalhados: [../diagramas/](../diagramas/).
@@ -48,7 +53,9 @@ Diagramas detalhados: [../diagramas/](../diagramas/).
 | Message broker | Desacopla escrita de consolidação | RabbitMQ |
 | DB Lançamentos | Fonte da verdade dos lançamentos | PostgreSQL |
 | DB Consolidado | Projeção de saldo diário | PostgreSQL |
-| Orquestração local | Subir stack completa | Docker Compose |
+| Métricas | Coleta `/metrics` dos serviços e do broker | Prometheus |
+| Dashboards | Visualização de SLIs/NFRs | Grafana |
+| Orquestração local | Subir stack completa (apps + obs) | Docker Compose |
 
 ## Padrões aplicados
 

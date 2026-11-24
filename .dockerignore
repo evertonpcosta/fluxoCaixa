@@ -1,6 +1,13 @@
 .git
+.claude
+.cursor
 **/__pycache__
 **/.pytest_cache
 **/.venv
+**/venv
 **/*.pyc
 **/.env
+**/.mypy_cache
+docs
+*.pdf
+README.md

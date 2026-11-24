@@ -26,7 +26,7 @@ Estimativa **orientativa** para demonstrar critério de arquiteto. Valores em US
 | PostgreSQL ×2 (managed) | db.t4g.micro/small | US$ 30–60 |
 | RabbitMQ (managed ou container) | small | US$ 15–40 |
 | Load balancer / TLS | 1 | US$ 15–20 |
-| Observabilidade básica | logs + métricas free tier / light | US$ 0–25 |
+| Observabilidade (Prometheus + Grafana) | small VMs / managed free tier | US$ 0–30 |
 | Tráfego / storage | baixo | US$ 5–15 |
 | **Total estimado** |  | **~US$ 90–215 / mês** |
 

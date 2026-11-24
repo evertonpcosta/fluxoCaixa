@@ -67,7 +67,7 @@ git push -u origin main
 
 ---
 
-## Etapa 2 — Documentação textual da arquitetura *(atual)*
+## Etapa 2 — Documentação textual da arquitetura *(feita)*
 
 - [x] Domínios funcionais e capacidades de negócio → `docs/arquitetura/dominios-e-capacidades.md`
 - [x] Requisitos funcionais e não funcionais refinados → `docs/arquitetura/requisitos.md`
@@ -90,22 +90,32 @@ git push
 
 ---
 
-## Etapa 3 — Infraestrutura base
+## Etapa 3 — Infraestrutura base + observabilidade *(atual)*
 
-- `docker-compose.yaml` (Postgres ×2, RabbitMQ, serviços, frontend)
-- `infra/postgres/` (init schemas)
-- `.gitignore`, `.dockerignore`, `README.md` esqueleto
-- Estrutura de pastas dos serviços e do front
+- [x] `docker-compose.yaml` (Postgres ×2, RabbitMQ, APIs, frontend, **Prometheus**, **Grafana**)
+- [x] Dockerfiles: `services/lancamentos`, `services/consolidado`, `frontend`
+- [x] `infra/postgres/` (init schemas)
+- [x] `infra/prometheus/` + `infra/grafana/` (datasource e dashboard provisionados)
+- [x] `infra/rabbitmq/enabled_plugins` (management + prometheus)
+- [x] Esqueletos com `/health` e `/metrics`
+- [x] `.dockerignore`, `README.md`
 
 ### Checkpoint Etapa 3
 
 ```bash
-git add docker-compose.yaml infra/ .gitignore .dockerignore README.md services/ frontend/
-git commit -m "chore: infra Docker e estrutura dos serviços Python"
+git add docker-compose.yaml infra/ .gitignore .dockerignore README.md services/ frontend/ docs/
+git commit -m "chore: infra Docker, Prometheus/Grafana e esqueleto dos serviços"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+Validação local sugerida:
+
+```bash
+docker compose up -d --build
+# Grafana http://localhost:3000  |  Prometheus http://localhost:9090
+```
+
+⏸ **Pausa** — commit e push por você. Avise para seguir.
 
 ---
 
@@ -216,14 +226,18 @@ fluxoCaixa/
 ├── docs/
 │   ├── ROADMAP.md
 │   ├── arquitetura/
-│   ├── diagramas/          # .drawio (Etapa 1)
-│   └── resultados/         # evidências NFR
-├── frontend/               # Streamlit (Python)
+│   ├── diagramas/
+│   └── resultados/
+├── frontend/                 # Streamlit + Dockerfile
 ├── services/
-│   ├── lancamentos/        # FastAPI
-│   └── consolidado/        # FastAPI
-├── infra/postgres/
-└── scripts/                # carga / isolamento
+│   ├── lancamentos/          # FastAPI + Dockerfile
+│   └── consolidado/          # FastAPI + Dockerfile
+├── infra/
+│   ├── postgres/
+│   ├── rabbitmq/
+│   ├── prometheus/
+│   └── grafana/
+└── scripts/
 ```
 
 ---
@@ -234,8 +248,8 @@ fluxoCaixa/
 |---|---|
 | 0 Remote | Feito |
 | 1 Diagramas C4 | Feito |
-| 2 Docs arquitetura | Em andamento (aguardando commit/push) |
-| 3 Infra | Pendente |
+| 2 Docs arquitetura | Feito |
+| 3 Infra + Grafana/Prometheus | Em andamento (aguardando commit/push) |
 | 4 Lançamentos | Pendente |
 | 5 Consolidado | Pendente |
 | 6 Frontend | Pendente |

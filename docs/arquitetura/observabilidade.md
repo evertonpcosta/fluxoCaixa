@@ -1,23 +1,44 @@
 # Monitoramento e observabilidade
 
-Diferencial do desafio. No MVP implementamos a base; o alvo completo fica como evolução.
+Stack de observabilidade **faz parte da arquitetura alvo** e sobe junto com o `docker-compose`.
 
 ## Pilares
 
-| Pilar | MVP | Alvo |
+| Pilar | MVP (Compose) | Evolução |
 |---|---|---|
-| Logs | stdout estruturado (JSON) | Agregação (Loki/ELK) |
-| Métricas | Contadores básicos / health | Prometheus + Grafana |
-| Traces | `X-Request-Id` / `event_id` | OpenTelemetry end-to-end |
+| Logs | stdout dos containers (`docker compose logs`) | Loki / ELK |
+| Métricas | **Prometheus** coleta + **Grafana** dashboards | Alertmanager |
+| Traces | `X-Request-Id` / `event_id` nos logs | OpenTelemetry |
 
-## O que observar por componente
+## Arquitetura da stack
+
+```text
+API Lançamentos ──/metrics──► Prometheus ──► Grafana
+API Consolidado ──/metrics──┘      ▲
+RabbitMQ ────────/metrics──────────┘
+```
+
+| Componente | Porta | Função |
+|---|---|---|
+| Prometheus | `9090` | Scrape e armazenamento de métricas |
+| Grafana | `3000` | Dashboards e exploração (admin/admin) |
+| APIs | `8001`, `8002` | Exportam `/metrics` (formato Prometheus) |
+| RabbitMQ | `15692` | Plugin `rabbitmq_prometheus` |
+
+Datasource e dashboard base são **provisionados automaticamente** em:
+
+- `infra/prometheus/prometheus.yml`
+- `infra/grafana/provisioning/`
+- `infra/grafana/dashboards/`
+
+## Métricas por componente
 
 ### API Lançamentos
 
 - Taxa de `POST /lancamentos` (sucesso/4xx/5xx)
-- Lag do outbox (quantidade pendente)
+- Latência HTTP (histogram)
+- Lag do outbox (gauge: pendentes)
 - Falhas de publish no RabbitMQ
-- Latência p95 do POST
 
 ### API Consolidado
 
@@ -25,41 +46,48 @@ Diferencial do desafio. No MVP implementamos a base; o alvo completo fica como e
 - Latência p95/p99 da consulta
 - Throughput do consumer (msgs/s)
 - Erros de processamento / requeues
-- Tamanho da fila (depth)
 
 ### RabbitMQ
 
-- Queue depth `lancamentos.criados`
+- Queue depth
 - Consumers ativos
-- Unacked messages
+- Unacked / ready messages
+- Publish/deliver rates
 
 ### Frontend
 
-- Erros HTTP por API
-- Timeouts para consolidado (sinal de degradação sem derrubar lançamentos)
+- Erros/timeouts tratados na UI (sinal de degradação do consolidado)
+- Métricas HTTP do front ficam como evolução (foco nos backends + broker no MVP)
 
 ## Healthchecks
 
 | Endpoint | Significado |
 |---|---|
-| `GET /health` | Processo no ar |
-| `GET /health/ready` (evolução) | DB + dependências críticas ok |
+| `GET /health` | Processo no ar (liveness) |
+| `GET /metrics` | Exposição Prometheus |
 
-Para **lançamentos**, readiness **não** deve depender do consolidado (reforça RNF-01).  
-Dependência do broker pode ser “degradada” (aceita escrita + outbox mesmo se publish imediato falhar).
+Para **lançamentos**, readiness **não** depende do consolidado (RNF-01).
 
-## SLIs / SLOs sugeridos
+## SLIs / SLOs
 
-| SLI | SLO (produção sugerido) |
+| SLI | SLO |
 |---|---|
-| Disponibilidade POST lançamentos | 99.9% mensal |
-| Sucesso GET saldo sob carga nominal | ≥ 95% (alinha ao “máx. 5% perda”) |
-| Lag de consolidação (evento → saldo) | p95 &lt; 5 s |
-| Outbox pendente | Alerta se &gt; N por M minutos |
+| Disponibilidade POST lançamentos | 99.9% (produção sugerido) |
+| Sucesso GET saldo sob carga | ≥ 95% (máx. 5% perda) |
+| Lag consolidação (evento → saldo) | p95 &lt; 5 s |
+| Outbox pendente | Alerta se crescer sem drenagem |
 
-## Alertas mínimos (produção)
+## Alertas mínimos (produção / Grafana Alerting)
 
 1. Fila crescendo sem consumer
-2. Taxa de erro 5xx &gt; limiar
+2. Taxa de erro 5xx acima do limiar
 3. Outbox sem drenagem
-4. Latência p95 saldo acima do alvo
+4. Latência p95 do saldo acima do alvo
+
+## Como acessar localmente
+
+```bash
+docker compose up -d
+# Grafana:     http://localhost:3000  (admin / admin)
+# Prometheus:  http://localhost:9090
+```
