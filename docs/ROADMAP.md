@@ -34,12 +34,12 @@ Cada etapa termina com um **checkpoint**. Nesse ponto você:
 
 ## Etapa 0 — Repositório e remote *(feita)*
 
-- [x] Remote `origin` → `https://github.com/evertonpcosta/fluxoCaixa.git`
+- [x] Remote `origin` → `git@github.com:evertonpcosta/fluxoCaixa.git`
 - [ ] Commit/push inicial quando houver conteúdo da Etapa 1
 
 ---
 
-## Etapa 1 — Documentação: diagramas C4 *(atual)*
+## Etapa 1 — Documentação: diagramas C4 *(feita)*
 
 **Objetivo:** apenas diagramas importáveis no [diagrams.net](https://app.diagrams.net/).
 
@@ -67,15 +67,16 @@ git push -u origin main
 
 ---
 
-## Etapa 2 — Documentação textual da arquitetura
+## Etapa 2 — Documentação textual da arquitetura *(atual)*
 
-- Domínios funcionais e capacidades de negócio
-- Requisitos funcionais e não funcionais refinados
-- Arquitetura alvo + justificativa de tecnologias
-- ADRs (Async messaging, DB por serviço, Streamlit, FastAPI)
-- Critérios de segurança de consumo das APIs
-- Observabilidade e estimativa de custos (diferenciais)
-- Evoluções futuras
+- [x] Domínios funcionais e capacidades de negócio → `docs/arquitetura/dominios-e-capacidades.md`
+- [x] Requisitos funcionais e não funcionais refinados → `docs/arquitetura/requisitos.md`
+- [x] Arquitetura alvo + justificativa de tecnologias → `docs/arquitetura/arquitetura-alvo.md`
+- [x] ADRs → `docs/arquitetura/adr/`
+- [x] Critérios de segurança de consumo das APIs → `docs/arquitetura/seguranca.md`
+- [x] Observabilidade e estimativa de custos → `docs/arquitetura/observabilidade.md`, `custos.md`
+- [x] Evoluções futuras → `docs/arquitetura/evolucoes-futuras.md`
+- Índice: `docs/arquitetura/README.md`
 
 ### Checkpoint Etapa 2
 
@@ -85,7 +86,7 @@ git commit -m "docs: arquitetura alvo, requisitos e ADRs"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+⏸ **Pausa** — commit e push por você. Avise para seguir.
 
 ---
 
@@ -232,8 +233,8 @@ fluxoCaixa/
 | Etapa | Status |
 |---|---|
 | 0 Remote | Feito |
-| 1 Diagramas C4 | Em andamento |
-| 2 Docs arquitetura | Pendente |
+| 1 Diagramas C4 | Feito |
+| 2 Docs arquitetura | Em andamento (aguardando commit/push) |
 | 3 Infra | Pendente |
 | 4 Lançamentos | Pendente |
 | 5 Consolidado | Pendente |
