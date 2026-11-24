@@ -146,7 +146,7 @@ cd services/lancamentos && pip install -r requirements.txt && pytest -q
 
 ---
 
-## Etapa 5 — Serviço de Consolidado (Python / FastAPI) *(atual)*
+## Etapa 5 — Serviço de Consolidado (Python / FastAPI) *(feita)*
 
 - [x] Consumer RabbitMQ (idempotente via `eventos_processados`)
 - [x] Agregação de saldo diário (crédito +, débito −)
@@ -173,23 +173,26 @@ cd services/consolidado && pip install -r requirements.txt && PYTHONPATH=. pytes
 
 ---
 
-## Etapa 6 — Frontend Python (Streamlit)
+## Etapa 6 — Frontend Python (Streamlit) *(atual)*
 
-- Tela de novo lançamento (débito/crédito)
-- Listagem de lançamentos
-- Consulta de saldo consolidado por data
-- Comunicação HTTP com os dois serviços
-- Tratamento de indisponibilidade do consolidado (UI resiliente)
+- [x] Tela de novo lançamento (débito/crédito)
+- [x] Listagem de lançamentos (com filtro por data)
+- [x] Consulta de saldo consolidado por data
+- [x] Comunicação HTTP (`frontend/clients.py`) com as duas APIs
+- [x] UI resiliente: consolidado DOWN não bloqueia lançamentos; aviso amigável no saldo
+- [x] Sidebar com health das APIs
 
 ### Checkpoint Etapa 6
 
 ```bash
-git add frontend/
+git add frontend/ docs/ROADMAP.md README.md
 git commit -m "feat: frontend Streamlit para lançamentos e saldo"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+Abrir: http://localhost:8501
+
+⏸ **Pausa** — commit e push por você. Avise para seguir.
 
 ---
 
@@ -265,7 +268,7 @@ fluxoCaixa/
 | 2 Docs arquitetura | Feito |
 | 3 Infra + Grafana/Prometheus | Feito |
 | 4 Lançamentos | Feito |
-| 5 Consolidado | Em andamento (aguardando commit/push) |
-| 6 Frontend | Pendente |
+| 5 Consolidado | Feito |
+| 6 Frontend | Em andamento (aguardando commit/push) |
 | 7 Testes/NFR | Pendente |
 | 8 Polish | Pendente |

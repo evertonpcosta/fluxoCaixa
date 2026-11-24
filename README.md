@@ -55,8 +55,17 @@ curl -s 'http://localhost:8002/saldo?data=2026-11-24'
 
 O consumer escuta a fila `consolidado.lancamento.criado` e atualiza `saldo_diario` de forma **idempotente**. Se este serviço cair, lançamentos continuam aceitando requests.
 
+## Frontend (Etapa 6)
+
+http://localhost:8501
+
+- **Novo lançamento** — crédito/débito
+- **Listagem** — histórico com filtro por data
+- **Saldo diário** — consulta ao consolidado
+- Se o consolidado estiver DOWN, a UI avisa na aba de saldo e **continua permitindo registrar lançamentos**
+
 ## Status da implementação
 
-- Etapas 1–4: docs, infra, observabilidade, lançamentos
-- Etapa 5: consolidado (API + consumer)
-- Etapa 6: UI Streamlit completa
+- Etapas 1–5: docs, infra, observabilidade, lançamentos, consolidado
+- Etapa 6: UI Streamlit
+- Etapas 7–8: evidências NFR e polish
