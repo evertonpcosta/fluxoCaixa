@@ -1,0 +1,5 @@
+{
+  "status": "aguardando_execucao",
+  "instrucao": "Com a stack no ar, execute: python3 scripts/recuperacao_outbox.py",
+  "criterio": "RNF-02 — eventos não consumidos são recuperáveis após retorno do consolidado"
+}

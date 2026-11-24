@@ -1,0 +1,5 @@
+{
+  "status": "aguardando_execucao",
+  "instrucao": "Com a stack no ar, execute: python3 scripts/carga_consolidado.py --rps 50 --duration 10",
+  "criterio": "RNF-03/04 — ~50 req/s no consolidado com perda ≤ 5%"
+}

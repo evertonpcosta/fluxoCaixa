@@ -64,8 +64,17 @@ http://localhost:8501
 - **Saldo diário** — consulta ao consolidado
 - Se o consolidado estiver DOWN, a UI avisa na aba de saldo e **continua permitindo registrar lançamentos**
 
+## Evidências NFR (Etapa 7)
+
+```bash
+pip install -r scripts/requirements.txt
+bash scripts/run_all.sh
+```
+
+Saídas em [`docs/resultados/`](docs/resultados/). Detalhes: [`scripts/README.md`](scripts/README.md).
+
 ## Status da implementação
 
-- Etapas 1–5: docs, infra, observabilidade, lançamentos, consolidado
-- Etapa 6: UI Streamlit
-- Etapas 7–8: evidências NFR e polish
+- Etapas 1–6: docs, infra, obs, lançamentos, consolidado, UI
+- Etapa 7: scripts de isolamento/carga/recuperação
+- Etapa 8: polish final

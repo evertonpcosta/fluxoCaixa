@@ -173,7 +173,7 @@ cd services/consolidado && pip install -r requirements.txt && PYTHONPATH=. pytes
 
 ---
 
-## Etapa 6 — Frontend Python (Streamlit) *(atual)*
+## Etapa 6 — Frontend Python (Streamlit) *(feita)*
 
 - [x] Tela de novo lançamento (débito/crédito)
 - [x] Listagem de lançamentos (com filtro por data)
@@ -196,22 +196,32 @@ Abrir: http://localhost:8501
 
 ---
 
-## Etapa 7 — Testes de integração, carga e evidências NFR
+## Etapa 7 — Testes de integração, carga e evidências NFR *(atual)*
 
-- Scripts de isolamento (consolidado down → lançamentos ok)
-- Script de carga (~50 req/s no consolidado)
-- Evidências em `docs/resultados/`
-- Testes automatizados ponta a ponta (quando couber)
+- [x] `scripts/isolamento_consolidado.py` (RNF-01)
+- [x] `scripts/carga_consolidado.py` (~50 rps, perda ≤ 5%)
+- [x] `scripts/atraso_saldo.py` (lag evento → saldo)
+- [x] `scripts/recuperacao_outbox.py` (RNF-02)
+- [x] `scripts/run_all.sh` + `scripts/README.md`
+- [x] Templates/evidências em `docs/resultados/`
+
+### Gerar evidências reais (com Docker ligado)
+
+```bash
+docker compose up -d --build
+pip install -r scripts/requirements.txt
+bash scripts/run_all.sh
+```
 
 ### Checkpoint Etapa 7
 
 ```bash
-git add scripts/ docs/resultados/ services/*/tests/
+git add scripts/ docs/resultados/ docs/ROADMAP.md README.md
 git commit -m "test: evidências de isolamento, carga e NFRs"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+⏸ **Pausa** — rode os scripts se puder, depois commit/push. Avise para seguir.
 
 ---
 
@@ -269,6 +279,6 @@ fluxoCaixa/
 | 3 Infra + Grafana/Prometheus | Feito |
 | 4 Lançamentos | Feito |
 | 5 Consolidado | Feito |
-| 6 Frontend | Em andamento (aguardando commit/push) |
-| 7 Testes/NFR | Pendente |
+| 6 Frontend | Feito |
+| 7 Testes/NFR | Em andamento (aguardando execução/commit) |
 | 8 Polish | Pendente |

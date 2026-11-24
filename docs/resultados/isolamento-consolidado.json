@@ -1,0 +1,5 @@
+{
+  "status": "aguardando_execucao",
+  "instrucao": "Com a stack no ar, execute: python3 scripts/isolamento_consolidado.py",
+  "criterio": "RNF-01 — serviço de lançamentos não fica indisponível se consolidado cair"
+}

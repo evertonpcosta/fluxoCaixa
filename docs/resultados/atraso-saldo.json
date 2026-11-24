@@ -1,0 +1,5 @@
+{
+  "status": "aguardando_execucao",
+  "instrucao": "Com a stack no ar, execute: python3 scripts/atraso_saldo.py",
+  "criterio": "Lag consolidação (evento → saldo) — alvo p95 < 5s"
+}
