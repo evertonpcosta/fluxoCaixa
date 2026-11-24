@@ -1,9 +1,13 @@
--- Schema inicial — serviço de consolidado (preenchido nas etapas de implementação)
-CREATE TABLE IF NOT EXISTS schema_meta (
-    chave TEXT PRIMARY KEY,
-    valor TEXT NOT NULL
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE IF NOT EXISTS saldo_diario (
+    data_referencia DATE PRIMARY KEY,
+    saldo NUMERIC(18, 2) NOT NULL DEFAULT 0,
+    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-INSERT INTO schema_meta (chave, valor)
-VALUES ('service', 'consolidado')
-ON CONFLICT (chave) DO NOTHING;
+CREATE TABLE IF NOT EXISTS eventos_processados (
+    event_id UUID PRIMARY KEY,
+    lancamento_id UUID NOT NULL,
+    processado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

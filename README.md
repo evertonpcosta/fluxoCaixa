@@ -46,8 +46,17 @@ curl -s 'http://localhost:8001/lancamentos?data=2026-11-24'
 
 Eventos vão para o outbox e o publisher envia para RabbitMQ (`fluxo.caixa` / `lancamento.criado`) sem bloquear a resposta HTTP.
 
+## API Consolidado (Etapa 5)
+
+```bash
+# consultar saldo do dia (aguarde alguns segundos após o POST para o consumer processar)
+curl -s 'http://localhost:8002/saldo?data=2026-11-24'
+```
+
+O consumer escuta a fila `consolidado.lancamento.criado` e atualiza `saldo_diario` de forma **idempotente**. Se este serviço cair, lançamentos continuam aceitando requests.
+
 ## Status da implementação
 
-- Etapas 1–3: docs, diagramas, infra Docker + Prometheus/Grafana
-- Etapa 4: serviço de lançamentos (API + outbox)
-- Etapas 5–6: consolidado e UI completa
+- Etapas 1–4: docs, infra, observabilidade, lançamentos
+- Etapa 5: consolidado (API + consumer)
+- Etapa 6: UI Streamlit completa

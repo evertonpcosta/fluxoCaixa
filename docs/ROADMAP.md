@@ -119,7 +119,7 @@ docker compose up -d --build
 
 ---
 
-## Etapa 4 — Serviço de Lançamentos (Python / FastAPI) *(atual)*
+## Etapa 4 — Serviço de Lançamentos (Python / FastAPI) *(feita)*
 
 - [x] Modelo de domínio (crédito/débito)
 - [x] API REST (`POST /lancamentos`, `GET /lancamentos`)
@@ -146,23 +146,30 @@ cd services/lancamentos && pip install -r requirements.txt && pytest -q
 
 ---
 
-## Etapa 5 — Serviço de Consolidado (Python / FastAPI)
+## Etapa 5 — Serviço de Consolidado (Python / FastAPI) *(atual)*
 
-- Consumer RabbitMQ (idempotente)
-- Agregação de saldo diário
-- API REST (`GET /saldo?data=YYYY-MM-DD`)
-- Isolamento: queda do consolidado não derruba lançamentos
-- Testes unitários
+- [x] Consumer RabbitMQ (idempotente via `eventos_processados`)
+- [x] Agregação de saldo diário (crédito +, débito −)
+- [x] API REST (`GET /saldo?data=YYYY-MM-DD`) — dia sem dados retorna saldo `0`
+- [x] Isolamento: consumer independente; lançamentos não dependem deste serviço
+- [x] Testes unitários (`tests/test_domain.py`)
+- [x] Schema SQL em `infra/postgres/consolidado-init.sql`
 
 ### Checkpoint Etapa 5
 
 ```bash
-git add services/consolidado/
+git add services/consolidado/ infra/postgres/consolidado-init.sql docs/ROADMAP.md README.md
 git commit -m "feat: serviço de consolidado diário com consumer assíncrono"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+Testes locais:
+
+```bash
+cd services/consolidado && pip install -r requirements.txt && PYTHONPATH=. pytest -q
+```
+
+⏸ **Pausa** — commit e push por você. Avise para seguir.
 
 ---
 
@@ -257,8 +264,8 @@ fluxoCaixa/
 | 1 Diagramas C4 | Feito |
 | 2 Docs arquitetura | Feito |
 | 3 Infra + Grafana/Prometheus | Feito |
-| 4 Lançamentos | Em andamento (aguardando commit/push) |
-| 5 Consolidado | Pendente |
+| 4 Lançamentos | Feito |
+| 5 Consolidado | Em andamento (aguardando commit/push) |
 | 6 Frontend | Pendente |
 | 7 Testes/NFR | Pendente |
 | 8 Polish | Pendente |

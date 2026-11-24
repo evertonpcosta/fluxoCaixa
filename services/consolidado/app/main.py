@@ -1,11 +1,22 @@
+import logging
 import time
+from datetime import date
 
-from fastapi import FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Query, Request, Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from sqlalchemy.orm import Session
 
+from app.config import settings
+from app.consumer import consumer
+from app.db import get_db
 from app.metrics import HTTP_LATENCY, HTTP_REQUESTS, SERVICE_NAME
+from app.schemas import SaldoResponse
+from app.service import consultar_saldo
 
-app = FastAPI(title="FluxoCaixa — Consolidado", version="0.1.0")
+logging.basicConfig(level=settings.log_level.upper())
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="FluxoCaixa — Consolidado", version="0.2.0")
 
 
 @app.middleware("http")
@@ -24,6 +35,17 @@ async def metrics_middleware(request: Request, call_next):
     return response
 
 
+@app.on_event("startup")
+def on_startup() -> None:
+    consumer.start()
+    logger.info("Serviço de consolidado iniciado")
+
+
+@app.on_event("shutdown")
+def on_shutdown() -> None:
+    consumer.stop()
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok", "service": SERVICE_NAME}
@@ -38,5 +60,13 @@ def metrics() -> Response:
 def root() -> dict:
     return {
         "service": SERVICE_NAME,
-        "message": "Esqueleto ativo. Endpoints de negócio na Etapa 5.",
+        "endpoints": ["GET /saldo", "GET /health", "GET /metrics"],
     }
+
+
+@app.get("/saldo", response_model=SaldoResponse)
+def get_saldo(
+    data: date = Query(..., description="Data de referência (YYYY-MM-DD)"),
+    db: Session = Depends(get_db),
+) -> SaldoResponse:
+    return consultar_saldo(db, data)
