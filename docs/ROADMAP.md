@@ -90,7 +90,7 @@ git push
 
 ---
 
-## Etapa 3 — Infraestrutura base + observabilidade *(atual)*
+## Etapa 3 — Infraestrutura base + observabilidade *(feita)*
 
 - [x] `docker-compose.yaml` (Postgres ×2, RabbitMQ, APIs, frontend, **Prometheus**, **Grafana**)
 - [x] Dockerfiles: `services/lancamentos`, `services/consolidado`, `frontend`
@@ -119,23 +119,30 @@ docker compose up -d --build
 
 ---
 
-## Etapa 4 — Serviço de Lançamentos (Python / FastAPI)
+## Etapa 4 — Serviço de Lançamentos (Python / FastAPI) *(atual)*
 
-- Modelo de domínio (crédito/débito)
-- API REST (`POST /lancamentos`, `GET /lancamentos`)
-- Persistência PostgreSQL + padrão Outbox
-- Publisher para RabbitMQ
-- Testes unitários
+- [x] Modelo de domínio (crédito/débito)
+- [x] API REST (`POST /lancamentos`, `GET /lancamentos`)
+- [x] Persistência PostgreSQL + padrão Outbox
+- [x] Publisher para RabbitMQ (relay em background)
+- [x] Testes unitários (`tests/test_domain.py`, `tests/test_schemas.py`)
+- [x] Schema SQL em `infra/postgres/lancamentos-init.sql`
 
 ### Checkpoint Etapa 4
 
 ```bash
-git add services/lancamentos/
+git add services/lancamentos/ infra/postgres/lancamentos-init.sql docs/ROADMAP.md
 git commit -m "feat: serviço de lançamentos FastAPI com outbox"
 git push
 ```
 
-⏸ **Pausa** — commit e push.
+Testes locais:
+
+```bash
+cd services/lancamentos && pip install -r requirements.txt && pytest -q
+```
+
+⏸ **Pausa** — commit e push por você. Avise para seguir.
 
 ---
 
@@ -249,8 +256,8 @@ fluxoCaixa/
 | 0 Remote | Feito |
 | 1 Diagramas C4 | Feito |
 | 2 Docs arquitetura | Feito |
-| 3 Infra + Grafana/Prometheus | Em andamento (aguardando commit/push) |
-| 4 Lançamentos | Pendente |
+| 3 Infra + Grafana/Prometheus | Feito |
+| 4 Lançamentos | Em andamento (aguardando commit/push) |
 | 5 Consolidado | Pendente |
 | 6 Frontend | Pendente |
 | 7 Testes/NFR | Pendente |

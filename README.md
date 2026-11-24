@@ -32,8 +32,22 @@ docker compose down
 - Diagramas C4: [docs/diagramas/](docs/diagramas/)
 - Observabilidade: [docs/arquitetura/observabilidade.md](docs/arquitetura/observabilidade.md)
 
+## API Lançamentos (Etapa 4)
+
+```bash
+# criar
+curl -s -X POST http://localhost:8001/lancamentos \
+  -H 'Content-Type: application/json' \
+  -d '{"tipo":"CREDITO","valor":"100.00","descricao":"venda","data_lancamento":"2026-11-24"}'
+
+# listar
+curl -s 'http://localhost:8001/lancamentos?data=2026-11-24'
+```
+
+Eventos vão para o outbox e o publisher envia para RabbitMQ (`fluxo.caixa` / `lancamento.criado`) sem bloquear a resposta HTTP.
+
 ## Status da implementação
 
-- Etapas 1–2: documentação e diagramas
-- Etapa 3: infra Docker + esqueletos com `/health` e `/metrics`
-- Etapas 4–6: regras de negócio (lançamentos, consolidado, UI completa)
+- Etapas 1–3: docs, diagramas, infra Docker + Prometheus/Grafana
+- Etapa 4: serviço de lançamentos (API + outbox)
+- Etapas 5–6: consolidado e UI completa
