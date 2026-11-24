@@ -9,6 +9,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _common import (  # noqa: E402
+    CONSOLIDADO_URL,
+    LANCAMENTOS_URL,
     docker_compose,
     get_saldo,
     health,
@@ -23,7 +25,7 @@ def main() -> int:
     steps: list[dict] = []
     passed = True
 
-    steps.append({"step": "baseline_health", "lancamentos": health("http://localhost:8001"), "consolidado": health("http://localhost:8002")})
+    steps.append({"step": "baseline_health", "lancamentos": health(LANCAMENTOS_URL), "consolidado": health(CONSOLIDADO_URL)})
     if not steps[-1]["lancamentos"]["ok"]:
         print("Pré-requisito: API lançamentos precisa estar UP.")
         save_result(
@@ -37,8 +39,8 @@ def main() -> int:
     if not stop["ok"]:
         passed = False
 
-    wait_until(lambda: not health("http://localhost:8002")["ok"], timeout_s=20)
-    steps.append({"step": "consolidado_down_check", "consolidado": health("http://localhost:8002")})
+    wait_until(lambda: not health(CONSOLIDADO_URL)["ok"], timeout_s=20)
+    steps.append({"step": "consolidado_down_check", "consolidado": health(CONSOLIDADO_URL)})
 
     resultados_post = [post_lancamento(descricao=f"isolamento-{i}") for i in range(5)]
     steps.append({"step": "posts_com_consolidado_down", "resultados": resultados_post})
@@ -53,8 +55,8 @@ def main() -> int:
 
     start = docker_compose("start", "consolidado")
     steps.append({"step": "start_consolidado", **start})
-    recovered = wait_until(lambda: health("http://localhost:8002")["ok"], timeout_s=60)
-    steps.append({"step": "consolidado_up_check", "recovered": recovered, "consolidado": health("http://localhost:8002")})
+    recovered = wait_until(lambda: health(CONSOLIDADO_URL)["ok"], timeout_s=60)
+    steps.append({"step": "consolidado_up_check", "recovered": recovered, "consolidado": health(CONSOLIDADO_URL)})
     if not recovered:
         passed = False
 

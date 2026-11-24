@@ -1,5 +1,25 @@
 {
-  "status": "aguardando_execucao",
-  "instrucao": "Com a stack no ar, execute: python3 scripts/atraso_saldo.py",
-  "criterio": "Lag consolidação (evento → saldo) — alvo p95 < 5s"
+  "executado_em": "2026-11-24T20:24:48.385054+00:00",
+  "criterio": "Lag consolidação (evento → saldo) — alvo p95 < 5s",
+  "passou": true,
+  "saldo_antes": "3665.76",
+  "valor_lancado": "7.77",
+  "saldo_esperado": "3673.53",
+  "saldo_observado": "3673.53",
+  "atraso_ms": 787.06,
+  "timeout_s": 20.0,
+  "created": {
+    "ok": true,
+    "status_code": 201,
+    "latency_ms": 11.14,
+    "body": {
+      "id": "976c8eae-46ac-4578-8b79-8aa102796fec",
+      "tipo": "CREDITO",
+      "valor": "7.77",
+      "descricao": "atraso-dc63f258",
+      "data_lancamento": "2026-11-24",
+      "criado_em": "2026-11-24T20:24:47.593426Z"
+    }
+  },
+  "tentativas": 4
 }

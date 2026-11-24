@@ -1,5 +1,31 @@
 {
-  "status": "aguardando_execucao",
-  "instrucao": "Com a stack no ar, execute: python3 scripts/carga_consolidado.py --rps 50 --duration 10",
-  "criterio": "RNF-03/04 — ~50 req/s no consolidado com perda ≤ 5%"
+  "executado_em": "2026-11-24T20:24:58.646953+00:00",
+  "criterio": "RNF-03/04 — vazão ≥ 90% de 50.0 rps e perda ≤ 5.0%",
+  "passou": true,
+  "config": {
+    "rps_alvo": 50.0,
+    "rps_minimo": 45.0,
+    "min_rps_ratio": 0.9,
+    "max_perda_pct": 5.0,
+    "duration_s": 10.0,
+    "workers": 32,
+    "total_requests": 500
+  },
+  "resultado": {
+    "elapsed_s": 9.995,
+    "rps_efetivo": 50.03,
+    "vazao_ok": true,
+    "perda_ok": true,
+    "sucesso": 500,
+    "falha": 0,
+    "perda_pct": 0.0,
+    "latencia_ms": {
+      "avg": 9.47,
+      "p50": 8.75,
+      "p95": 14.42,
+      "p99": 16.27,
+      "max": 25.14
+    },
+    "erros_amostra": []
+  }
 }

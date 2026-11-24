@@ -28,7 +28,8 @@ Conferência dos requisitos do PDF `desafio-arquiteto-solucao-jun25`.
 | Requisito | Status | Evidência |
 |---|---|---|
 | Lançamentos não caem se consolidado cair | Atendido | Outbox + fila; `scripts/isolamento_consolidado.py` |
-| Consolidado ~50 rps, perda ≤ 5% | Atendido (script) | `scripts/carga_consolidado.py` |
+| Eventos recuperáveis / partida com consolidado down | Atendido | Publisher confirma + declara fila; `scripts/partida_consolidado_down.py` |
+| Consolidado ~50 rps, perda ≤ 5% **e** vazão | Atendido (script) | `scripts/carga_consolidado.py` (perda + RPS mínimo) |
 
 ## Diferenciais
 

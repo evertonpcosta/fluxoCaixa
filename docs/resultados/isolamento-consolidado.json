@@ -1,5 +1,162 @@
 {
-  "status": "aguardando_execucao",
-  "instrucao": "Com a stack no ar, execute: python3 scripts/isolamento_consolidado.py",
-  "criterio": "RNF-01 — serviço de lançamentos não fica indisponível se consolidado cair"
+  "executado_em": "2026-11-24T20:25:12.428153+00:00",
+  "criterio": "RNF-01 — serviço de lançamentos não fica indisponível se consolidado cair",
+  "passou": true,
+  "resumo": {
+    "posts_ok": 5,
+    "posts_total": 5,
+    "saldo_falhou_como_esperado": true,
+    "consolidado_recuperado": true
+  },
+  "steps": [
+    {
+      "step": "baseline_health",
+      "lancamentos": {
+        "ok": true,
+        "status_code": 200,
+        "latency_ms": 76.68,
+        "body": "{\"status\":\"ok\",\"service\":\"lancamentos\"}"
+      },
+      "consolidado": {
+        "ok": true,
+        "status_code": 200,
+        "latency_ms": 10.46,
+        "body": "{\"status\":\"ok\",\"service\":\"consolidado\"}"
+      }
+    },
+    {
+      "step": "stop_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "stop",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-consolidado-1  Stopping\n Container fluxocaixa-consolidado-1  Stopped",
+      "latency_ms": 759.26
+    },
+    {
+      "step": "consolidado_down_check",
+      "consolidado": {
+        "ok": false,
+        "status_code": null,
+        "latency_ms": 3530.2,
+        "error": "[Errno -2] Name does not resolve"
+      }
+    },
+    {
+      "step": "posts_com_consolidado_down",
+      "resultados": [
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 11.42,
+          "body": {
+            "id": "ef30033b-9fa3-4eb8-ab7d-864c3196d186",
+            "tipo": "CREDITO",
+            "valor": "10.00",
+            "descricao": "isolamento-0",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:07.093350Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 11.78,
+          "body": {
+            "id": "0138a797-7fc7-4deb-ab15-b8c22374fc59",
+            "tipo": "CREDITO",
+            "valor": "10.00",
+            "descricao": "isolamento-1",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:07.105722Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 11.72,
+          "body": {
+            "id": "c3425bce-9489-44fc-bd8d-b7ca4c993673",
+            "tipo": "CREDITO",
+            "valor": "10.00",
+            "descricao": "isolamento-2",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:07.117144Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 11.79,
+          "body": {
+            "id": "4d729d58-1e56-4b66-a0a6-ac7725e3b199",
+            "tipo": "CREDITO",
+            "valor": "10.00",
+            "descricao": "isolamento-3",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:07.129101Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 11.36,
+          "body": {
+            "id": "6e3e7ee5-ebcd-4b2d-94b6-ef6dcc9619b8",
+            "tipo": "CREDITO",
+            "valor": "10.00",
+            "descricao": "isolamento-4",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:07.140598Z"
+          }
+        }
+      ]
+    },
+    {
+      "step": "get_saldo_esperado_falhar",
+      "resultado": {
+        "ok": false,
+        "status_code": null,
+        "latency_ms": 3520.21,
+        "error": "[Errno -2] Name does not resolve"
+      }
+    },
+    {
+      "step": "start_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "start",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-rabbitmq-1  Waiting\n Container fluxocaixa-postgres-consolidado-1  Waiting\n Container fluxocaixa-rabbitmq-1  Healthy\n Container fluxocaixa-postgres-consolidado-1  Healthy\n Container fluxocaixa-consolidado-1  Starting\n Container fluxocaixa-consolidado-1  Started",
+      "latency_ms": 724.22
+    },
+    {
+      "step": "consolidado_up_check",
+      "recovered": true,
+      "consolidado": {
+        "ok": true,
+        "status_code": 200,
+        "latency_ms": 7.61,
+        "body": "{\"status\":\"ok\",\"service\":\"consolidado\"}"
+      }
+    }
+  ]
 }

@@ -15,4 +15,7 @@ python3 scripts/isolamento_consolidado.py
 echo "==> recuperacao_outbox"
 python3 scripts/recuperacao_outbox.py
 
+echo "==> partida_consolidado_down"
+python3 scripts/partida_consolidado_down.py
+
 echo "Evidências em docs/resultados/*.json"

@@ -99,6 +99,24 @@ cd services/lancamentos && pip install -r requirements.txt && PYTHONPATH=. pytes
 cd services/consolidado && pip install -r requirements.txt && PYTHONPATH=. pytest -q
 ```
 
+## Observabilidade (Prometheus / Grafana)
+
+```bash
+# 1) stack no ar
+docker compose up -d --build
+
+# 2) gerar tráfego para popular os gráficos
+pip install -r scripts/requirements.txt
+python3 scripts/gerar_observabilidade.py
+
+# alternativa em container:
+# docker compose --profile obs up --build gerar-observabilidade
+```
+
+Depois abra http://localhost:3000 (`admin`/`admin`) → **Dashboards → FluxoCaixa → FluxoCaixa — Overview** (range *Last 15 minutes*).
+
+Guia: [`docs/arquitetura/como-usar-observabilidade.md`](docs/arquitetura/como-usar-observabilidade.md)
+
 ## Evidências NFR
 
 ```bash

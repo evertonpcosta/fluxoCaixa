@@ -12,11 +12,19 @@ from uuid import uuid4
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from _common import get_saldo, health, now_iso, post_lancamento, save_result  # noqa: E402
+from _common import (  # noqa: E402
+    CONSOLIDADO_URL,
+    LANCAMENTOS_URL,
+    get_saldo,
+    health,
+    now_iso,
+    post_lancamento,
+    save_result,
+)
 
 
 def main() -> int:
-    if not health("http://localhost:8001")["ok"] or not health("http://localhost:8002")["ok"]:
+    if not health(LANCAMENTOS_URL)["ok"] or not health(CONSOLIDADO_URL)["ok"]:
         print("Pré-requisito: lançamentos e consolidado UP.")
         save_result("atraso-saldo", {"executado_em": now_iso(), "passou": False, "motivo": "deps_down"})
         return 1

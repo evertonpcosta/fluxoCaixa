@@ -150,6 +150,25 @@ services:
     networks:
       - fluxo-caixa
 
+  # Gera tráfego de negócio para popular Prometheus/Grafana.
+  # Uso: docker compose --profile obs up gerar-observabilidade
+  gerar-observabilidade:
+    profiles: ["obs"]
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile
+    environment:
+      LANCAMENTOS_URL: http://lancamentos:8001
+      CONSOLIDADO_URL: http://consolidado:8002
+      HTTP_TIMEOUT: "5.0"
+    depends_on:
+      lancamentos:
+        condition: service_healthy
+      consolidado:
+        condition: service_healthy
+    networks:
+      - fluxo-caixa
+
 volumes:
   pg_lancamentos_data:
   pg_consolidado_data:

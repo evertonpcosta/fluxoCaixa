@@ -1,0 +1,130 @@
+{
+  "executado_em": "2026-11-24T20:25:36.170409+00:00",
+  "criterio": "Partida com consolidado DOWN: publisher declara fila+bind, confirma no broker e eventos são drenados após recover",
+  "passou": true,
+  "posts": 5,
+  "valor_unitario": "2.50",
+  "saldo_observado": "3742.28",
+  "recuperacao_s": 1.02,
+  "steps": [
+    {
+      "step": "stop_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "stop",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-consolidado-1  Stopping\n Container fluxocaixa-consolidado-1  Stopped",
+      "latency_ms": 649.23
+    },
+    {
+      "step": "saldo_com_down",
+      "resultado": {
+        "ok": false,
+        "status_code": null,
+        "latency_ms": 3861.27,
+        "error": "[Errno -2] Name does not resolve"
+      }
+    },
+    {
+      "step": "posts_com_consolidado_down",
+      "resultados": [
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 13.15,
+          "body": {
+            "id": "e5b8d5b6-6100-4733-a3b4-6e9baf8d289a",
+            "tipo": "CREDITO",
+            "valor": "2.50",
+            "descricao": "partida-down-fc1cea-0",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:30.313968Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 12.95,
+          "body": {
+            "id": "9dbc6208-9c5e-42d6-ad79-8fca28a677f0",
+            "tipo": "CREDITO",
+            "valor": "2.50",
+            "descricao": "partida-down-ed21ab-1",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:30.328098Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 13.85,
+          "body": {
+            "id": "be2e7132-9135-4346-809f-aeb06a2cd507",
+            "tipo": "CREDITO",
+            "valor": "2.50",
+            "descricao": "partida-down-fe69ff-2",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:30.341512Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 14.33,
+          "body": {
+            "id": "418098f1-9a49-47d7-9f07-490bc9c2c283",
+            "tipo": "CREDITO",
+            "valor": "2.50",
+            "descricao": "partida-down-4488a9-3",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:30.354846Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 13.16,
+          "body": {
+            "id": "61d69f64-f910-4e85-80c2-4bc206c2a014",
+            "tipo": "CREDITO",
+            "valor": "2.50",
+            "descricao": "partida-down-47aebd-4",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:30.368611Z"
+          }
+        }
+      ]
+    },
+    {
+      "step": "start_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "start",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-rabbitmq-1  Waiting\n Container fluxocaixa-postgres-consolidado-1  Waiting\n Container fluxocaixa-postgres-consolidado-1  Healthy\n Container fluxocaixa-rabbitmq-1  Healthy\n Container fluxocaixa-consolidado-1  Starting\n Container fluxocaixa-consolidado-1  Started",
+      "latency_ms": 740.91
+    },
+    {
+      "step": "health_after_start",
+      "recovered": true
+    }
+  ]
+}

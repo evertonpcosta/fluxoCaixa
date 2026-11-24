@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import time
 from datetime import date, datetime, timezone
@@ -12,8 +13,14 @@ from typing import Any
 
 import httpx
 
-ROOT = Path(__file__).resolve().parents[1]
-RESULTADOS = ROOT / "docs" / "resultados"
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_CANDIDATE_ROOT = _SCRIPT_DIR.parent
+ROOT = _CANDIDATE_ROOT if (_CANDIDATE_ROOT / "docs").exists() else _SCRIPT_DIR
+RESULTADOS = (
+    ROOT / "docs" / "resultados"
+    if (ROOT / "docs").exists()
+    else Path("/tmp/fluxo-caixa-resultados")
+)
 
 LANCAMENTOS_URL = os.getenv("LANCAMENTOS_URL", "http://localhost:8001").rstrip("/")
 CONSOLIDADO_URL = os.getenv("CONSOLIDADO_URL", "http://localhost:8002").rstrip("/")
@@ -110,15 +117,25 @@ def get_saldo(data_referencia: date | None = None) -> dict[str, Any]:
 
 
 def docker_compose(*args: str) -> dict[str, Any]:
-    cmd = ["docker", "compose", *args]
+    docker_bin = "docker.exe" if shutil.which("docker.exe") else "docker"
+    compose_file = os.getenv("COMPOSE_FILE")
+    project_dir = os.getenv("COMPOSE_PROJECT_DIRECTORY", str(ROOT))
+    project_name = os.getenv("COMPOSE_PROJECT_NAME", "fluxocaixa")
+    cmd = [docker_bin, "compose", "--project-name", project_name]
+    if compose_file:
+        cmd.extend(["-f", compose_file, "--project-directory", project_dir])
+    cmd.extend(args)
     started = time.perf_counter()
     try:
+        env = os.environ.copy()
+        env["COMPOSE_PROJECT_NAME"] = project_name
         completed = subprocess.run(
             cmd,
-            cwd=ROOT,
+            cwd=project_dir if Path(project_dir).exists() else str(ROOT),
             capture_output=True,
             text=True,
             check=False,
+            env=env,
         )
         return {
             "ok": completed.returncode == 0,

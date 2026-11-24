@@ -13,6 +13,8 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _common import (  # noqa: E402
+    CONSOLIDADO_URL,
+    LANCAMENTOS_URL,
     docker_compose,
     get_saldo,
     health,
@@ -27,14 +29,14 @@ def main() -> int:
     steps: list[dict] = []
     data_ref = date.today()
 
-    if not health("http://localhost:8001")["ok"]:
+    if not health(LANCAMENTOS_URL)["ok"]:
         save_result("recuperacao-outbox", {"executado_em": now_iso(), "passou": False, "motivo": "lancamentos_down"})
         return 1
 
     # Garante consolidado up para ler saldo base
-    if not health("http://localhost:8002")["ok"]:
+    if not health(CONSOLIDADO_URL)["ok"]:
         docker_compose("start", "consolidado")
-        wait_until(lambda: health("http://localhost:8002")["ok"], timeout_s=60)
+        wait_until(lambda: health(CONSOLIDADO_URL)["ok"], timeout_s=60)
 
     base = get_saldo(data_ref)
     saldo_antes = Decimal(str((base.get("body") or {}).get("saldo", "0"))) if base["ok"] else Decimal("0")
@@ -42,7 +44,7 @@ def main() -> int:
 
     stop = docker_compose("stop", "consolidado")
     steps.append({"step": "stop_consolidado", **stop})
-    wait_until(lambda: not health("http://localhost:8002")["ok"], timeout_s=20)
+    wait_until(lambda: not health(CONSOLIDADO_URL)["ok"], timeout_s=20)
 
     n = 5
     valor = Decimal("1.25")
@@ -66,7 +68,7 @@ def main() -> int:
 
     start = docker_compose("start", "consolidado")
     steps.append({"step": "start_consolidado", **start})
-    recovered = wait_until(lambda: health("http://localhost:8002")["ok"], timeout_s=60)
+    recovered = wait_until(lambda: health(CONSOLIDADO_URL)["ok"], timeout_s=60)
     steps.append({"step": "health_after_start", "recovered": recovered})
 
     esperado = (saldo_antes + (valor * n)).quantize(Decimal("0.01"))

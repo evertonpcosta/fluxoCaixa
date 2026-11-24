@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     rabbitmq_url: str = "amqp://fluxo:fluxo@localhost:5672/"
     rabbitmq_exchange: str = "fluxo.caixa"
     rabbitmq_routing_key: str = "lancamento.criado"
+    rabbitmq_queue: str = "consolidado.lancamento.criado"
     outbox_poll_seconds: float = 1.0
     log_level: str = "INFO"
 

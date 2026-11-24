@@ -19,4 +19,7 @@ python3 scripts/carga_consolidado.py --rps 50 --duration 10
 
 Ver JSON gerado: [carga-consolidado.json](carga-consolidado.json)
 
-Passa se `resultado.perda_pct <= 5`.
+Passa se **as duas** condições forem verdadeiras:
+
+- `resultado.perda_pct <= 5` (`perda_ok`)
+- `resultado.rps_efetivo >= 90% do rps alvo` (`vazao_ok`)

@@ -1,5 +1,138 @@
 {
-  "status": "aguardando_execucao",
-  "instrucao": "Com a stack no ar, execute: python3 scripts/recuperacao_outbox.py",
-  "criterio": "RNF-02 — eventos não consumidos são recuperáveis após retorno do consolidado"
+  "executado_em": "2026-11-24T20:25:21.668227+00:00",
+  "criterio": "RNF-02 — eventos não consumidos são recuperáveis após retorno do consolidado",
+  "passou": true,
+  "saldo_antes": "3723.53",
+  "lancamentos": 5,
+  "valor_unitario": "1.25",
+  "saldo_esperado": "3729.78",
+  "saldo_observado": "3729.78",
+  "recuperacao_ms": 8.83,
+  "steps": [
+    {
+      "step": "saldo_base",
+      "resultado": {
+        "ok": true,
+        "status_code": 200,
+        "latency_ms": 12.45,
+        "body": {
+          "data": "2026-11-24",
+          "saldo": "3723.53",
+          "atualizado_em": "2026-11-24T20:25:12.234744Z",
+          "encontrado": true
+        }
+      },
+      "saldo_antes": "3723.53"
+    },
+    {
+      "step": "stop_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "stop",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-consolidado-1  Stopping\n Container fluxocaixa-consolidado-1  Stopped",
+      "latency_ms": 670.05
+    },
+    {
+      "step": "posts_com_down",
+      "resultados": [
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 13.72,
+          "body": {
+            "id": "5f0c2be3-57c4-4d13-bcfc-a86cac189478",
+            "tipo": "CREDITO",
+            "valor": "1.25",
+            "descricao": "recuperacao-ef0ce4-0",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:19.822207Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 12.75,
+          "body": {
+            "id": "db2a17eb-3212-4165-baf2-f15e3559da86",
+            "tipo": "CREDITO",
+            "valor": "1.25",
+            "descricao": "recuperacao-fb3976-1",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:19.835203Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 12.75,
+          "body": {
+            "id": "6ec25101-d3ff-4d87-aef9-315e1a48a342",
+            "tipo": "CREDITO",
+            "valor": "1.25",
+            "descricao": "recuperacao-a12fd5-2",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:19.848549Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 12.87,
+          "body": {
+            "id": "7154036b-eddf-45d5-a0e5-ac9553f57a11",
+            "tipo": "CREDITO",
+            "valor": "1.25",
+            "descricao": "recuperacao-071c05-3",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:19.861542Z"
+          }
+        },
+        {
+          "ok": true,
+          "status_code": 201,
+          "latency_ms": 13.89,
+          "body": {
+            "id": "83278a55-84f5-431e-965a-7d951371252c",
+            "tipo": "CREDITO",
+            "valor": "1.25",
+            "descricao": "recuperacao-85bf6c-4",
+            "data_lancamento": "2026-11-24",
+            "criado_em": "2026-11-24T20:25:19.874616Z"
+          }
+        }
+      ]
+    },
+    {
+      "step": "start_consolidado",
+      "ok": true,
+      "cmd": [
+        "docker",
+        "compose",
+        "-f",
+        "/work/docker-compose.yaml",
+        "--project-directory",
+        "/work",
+        "start",
+        "consolidado"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Container fluxocaixa-postgres-consolidado-1  Waiting\n Container fluxocaixa-rabbitmq-1  Waiting\n Container fluxocaixa-rabbitmq-1  Healthy\n Container fluxocaixa-postgres-consolidado-1  Healthy\n Container fluxocaixa-consolidado-1  Starting\n Container fluxocaixa-consolidado-1  Started",
+      "latency_ms": 743.94
+    },
+    {
+      "step": "health_after_start",
+      "recovered": true
+    }
+  ]
 }

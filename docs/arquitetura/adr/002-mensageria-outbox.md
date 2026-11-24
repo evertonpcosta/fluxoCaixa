@@ -31,3 +31,9 @@ Publicar direto na fila *dentro* do request, sem outbox, gera risco de dual-writ
 - Lançamentos respondem 201 sem depender do consolidado.
 - Consistência do saldo é **eventual**.
 - Precisa de relay de outbox e monitoramento de lag da fila.
+
+## Refinamento operacional
+
+- O publisher **declara** exchange + fila + bind (não depende do consumer ter subido).
+- Publicação usa **publisher confirms** (`confirm_delivery` + `mandatory=True`); só marca outbox após ack do broker.
+- Evidência de partida com consolidado DOWN: `scripts/partida_consolidado_down.py`.

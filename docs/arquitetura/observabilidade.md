@@ -91,3 +91,18 @@ docker compose up -d
 # Grafana:     http://localhost:3000  (admin / admin)
 # Prometheus:  http://localhost:9090
 ```
+
+## Popular o dashboard (obrigatório para ver gráficos)
+
+Os targets sobem automaticamente, mas **sem tráfego de negócio os painéis ficam vazios**.
+
+```bash
+# opção 1 — script no host
+pip install -r scripts/requirements.txt
+python3 scripts/gerar_observabilidade.py
+
+# opção 2 — container one-shot
+docker compose --profile obs up --build gerar-observabilidade
+```
+
+Passo a passo (Grafana + PromQL): [`como-usar-observabilidade.md`](como-usar-observabilidade.md)
