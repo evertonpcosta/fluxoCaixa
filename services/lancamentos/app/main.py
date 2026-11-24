@@ -9,12 +9,13 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.db import get_db
 from app.domain import DomainError
+from app.logging_config import configure_logging
 from app.metrics import HTTP_LATENCY, HTTP_REQUESTS, SERVICE_NAME
 from app.publisher import publisher
 from app.schemas import LancamentoCreate, LancamentoListResponse, LancamentoResponse
 from app.service import criar_lancamento, obter_lancamentos
 
-logging.basicConfig(level=settings.log_level.upper())
+configure_logging(settings.log_level)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="FluxoCaixa — Lançamentos", version="0.2.0")

@@ -9,11 +9,12 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.consumer import consumer
 from app.db import get_db
+from app.logging_config import configure_logging
 from app.metrics import HTTP_LATENCY, HTTP_REQUESTS, SERVICE_NAME
 from app.schemas import SaldoResponse
 from app.service import consultar_saldo
 
-logging.basicConfig(level=settings.log_level.upper())
+configure_logging(settings.log_level)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="FluxoCaixa — Consolidado", version="0.2.0")

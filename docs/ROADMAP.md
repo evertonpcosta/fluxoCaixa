@@ -196,7 +196,7 @@ Abrir: http://localhost:8501
 
 ---
 
-## Etapa 7 — Testes de integração, carga e evidências NFR *(atual)*
+## Etapa 7 — Testes de integração, carga e evidências NFR *(feita)*
 
 - [x] `scripts/isolamento_consolidado.py` (RNF-01)
 - [x] `scripts/carga_consolidado.py` (~50 rps, perda ≤ 5%)
@@ -225,22 +225,22 @@ git push
 
 ---
 
-## Etapa 8 — README final, observabilidade e polish
+## Etapa 8 — README final, observabilidade e polish *(atual)*
 
-- README completo (como rodar localmente)
-- Healthchecks, logs estruturados, métricas básicas
-- Revisão dos diferenciais (segurança, custos, evolução)
-- Conferência dos requisitos obrigatórios do PDF
+- [x] README completo (como funciona + como rodar)
+- [x] Healthchecks (`/health`), métricas (`/metrics`), logs JSON
+- [x] Diferenciais revisados (segurança, custos, obs, evolução)
+- [x] Checklist dos requisitos do PDF → `docs/arquitetura/checklist-entrega.md`
 
 ### Checkpoint Etapa 8
 
 ```bash
-git add README.md docs/ services/ frontend/
+git add README.md docs/ services/lancamentos/app/logging_config.py services/lancamentos/app/main.py services/consolidado/app/logging_config.py services/consolidado/app/main.py
 git commit -m "docs: README final e polish de observabilidade"
 git push
 ```
 
-✅ **Entrega pronta** no repositório público.
+✅ **Entrega pronta** no repositório público após este push.
 
 ---
 
@@ -280,5 +280,5 @@ fluxoCaixa/
 | 4 Lançamentos | Feito |
 | 5 Consolidado | Feito |
 | 6 Frontend | Feito |
-| 7 Testes/NFR | Em andamento (aguardando execução/commit) |
-| 8 Polish | Pendente |
+| 7 Testes/NFR | Feito |
+| 8 Polish | Em andamento (aguardando commit/push) |

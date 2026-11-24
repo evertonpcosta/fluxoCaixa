@@ -13,4 +13,5 @@ Diagramas C4 e fluxos: [../diagramas/](../diagramas/).
 | [observabilidade.md](observabilidade.md) | Prometheus + Grafana (stack no Compose) |
 | [custos.md](custos.md) | Estimativa de custos (infra e licenças) |
 | [evolucoes-futuras.md](evolucoes-futuras.md) | Evoluções e backlog arquitetural |
+| [checklist-entrega.md](checklist-entrega.md) | Conferência dos requisitos do PDF |
 | [adr/](adr/) | Architecture Decision Records |
