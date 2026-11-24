@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" modified="2026-11-24T11:50:00.000Z" agent="FluxoCaixa" version="22.0.0" type="device">
+  <diagram id="fluxo-saldo" name="Fluxo - Consulta Saldo">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="&lt;b&gt;Fluxo de arquitetura — Consulta de saldo diário consolidado&lt;/b&gt;&lt;br&gt;Leitura síncrona apenas no domínio Consolidado" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="800" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="h1" value="&lt;b&gt;Comerciante&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#062F55;fontColor=#ffffff;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="140" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="h2" value="&lt;b&gt;API Consolidado&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="100" width="180" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3" value="&lt;b&gt;DB Consolidado&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#ffffff;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="100" width="160" height="36" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="l1" value="" style="endArrow=none;html=1;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="140" as="sourcePoint"/>
+            <mxPoint x="150" y="560" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2" value="" style="endArrow=none;html=1;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="140" as="sourcePoint"/>
+            <mxPoint x="450" y="560" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l3" value="" style="endArrow=none;html=1;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="760" y="140" as="sourcePoint"/>
+            <mxPoint x="760" y="560" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="s1" value="1. GET /saldo?data=YYYY-MM-DD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="170" y="180" width="260" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="s2" value="2. SELECT saldo_diario&#xa;WHERE data = ?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="470" y="280" width="270" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="s3" value="3. Retorna saldo&#xa;{data, saldo, atualizado_em}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="470" y="380" width="270" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="s4" value="4. 200 OK + JSON saldo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="170" y="480" width="260" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="note" value="&lt;b&gt;Observação:&lt;/b&gt; a consulta de saldo não passa pelo serviço de lançamentos. Domínios separados (DB por serviço)." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="700" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="nfr" value="&lt;b&gt;NFR carga:&lt;/b&gt; pico ~50 req/s no consolidado, perda máxima 5%." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="500" height="40" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
